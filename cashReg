@@ -1,0 +1,62 @@
+//FreeCodeCamp final JavaScript project
+
+const MONEY = [
+  ["PENNY", 1], ["NICKEL", 5], ["DIME", 10], 
+  ["QUARTER", 25], ["ONE", 100],
+  ["FIVE", 500], ["TEN", 1000],
+  ["TWENTY", 2000], ["FIFTY", 5000],
+  ["HUNDRED", 10000]
+];
+
+function checkCashRegister(price, cash, cid) {
+  let change = Math.round(cash * 100) - Math.round(price * 100); 
+  let cashOnHand = {};
+  let cashToReturn = {}; 
+
+  cid.forEach(function(MONEY) {
+    cashOnHand[MONEY[0]] = Math.round(MONEY[1] * 100);
+  })
+
+  let index = MONEY.length - 1;
+  
+  while (index >= 0) {  
+    let moneyName = MONEY[index][0];
+    let moneyValue = MONEY[index][1];
+
+    if (change - moneyValue > 0 && cashOnHand[moneyName], change){
+       cashToReturn[moneyName] = 0;
+       while (cashOnHand[moneyName] > 0 && change - moneyValue >= 0){
+         cashOnHand[moneyName] -= moneyValue;
+         cashToReturn[moneyName] += moneyValue;
+         change -= moneyValue; 
+       }
+    }
+    index -= 1;
+  }
+
+  if (change === 0) {
+    let isEmpty = true;
+
+    Object.keys(cashOnHand).forEach(function(moneyType){
+      if (cashOnHand[moneyType] > 0){
+        isEmpty = false;
+      }
+    });
+
+  if (isEmpty) {
+    return({status: "CLOSED", 
+    change: cid});
+  } else {
+    let changeArray = [];
+    Object.keys(cashToReturn).map(function(moneyType) {
+      if (cashToReturn[moneyType] > 0){
+      changeArray.push([moneyType, cashToReturn[moneyType] / 100]);
+      }
+    });
+    console.log({status: "OPEN", change: changeArray});
+    return {status: "OPEN", change: changeArray};
+  }
+  }
+  return {status: "INSUFFICIENT_FUNDS", change: []};
+
+}
